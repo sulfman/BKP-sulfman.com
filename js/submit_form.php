@@ -1,48 +1,47 @@
 <?php
-// Verify Google reCAPTCHA
-$recaptcha_secret = '6Ld21nkpAAAAAAwLPI0Pf62Fl1FPGwbtAnce9-2B';
-$recaptcha_response = $_POST['recaptcha_token'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Get the form fields
+    $name = strip_tags(trim($_POST["name"]));
+    $email = filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL);
+    $message = trim($_POST["message"]);
 
-$recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
-$recaptcha_data = array(
-    'secret' => $recaptcha_secret,
-    'response' => $recaptcha_response
-);
+    // Check for empty fields
+    if (empty($name) || empty($email) || empty($message)) {
+        http_response_code(400);
+        echo "Please fill in all fields.";
+        exit;
+    }
 
-$recaptcha_options = array(
-    'http' => array(
-        'method' => 'POST',
-        'content' => http_build_query($recaptcha_data)
-    )
-);
+    // Validate email
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        http_response_code(400);
+        echo "Invalid email address.";
+        exit;
+    }
 
-$recaptcha_context = stream_context_create($recaptcha_options);
-$recaptcha_result = file_get_contents($recaptcha_url, false, $recaptcha_context);
-$recaptcha_json = json_decode($recaptcha_result);
+    // Set recipient email address
+    $to = "faisalweedy@gmail.com"; // Change this to your email address
 
-if (!$recaptcha_json->success) {
-    $response = array('success' => false, 'message' => 'reCAPTCHA verification failed.');
-    echo json_encode($response);
-    exit;
-}
+    // Set email subject
+    $subject = "New Contact Form Submission";
 
-// Handle form submission
-$name = $_POST['name'];
-$email = $_POST['email'];
-$message = $_POST['message'];
+    // Build the email content
+    $email_content = "Name: $name\n";
+    $email_content .= "Email: $email\n\n";
+    $email_content .= "Message:\n$message\n";
 
-// You can add further validation here if needed
+    // Build the email headers
+    $headers = "From: $name <$email>";
 
-// Send email
-$to = 'faisal.farouk@sulfman.com';
-$subject = 'Contact Form Submission';
-$body = "Name: $name\nEmail: $email\nMessage: $message";
-$headers = 'From: ' . $email;
-
-if (mail($to, $subject, $body, $headers)) {
-    $response = array('success' => true, 'message' => 'Your message has been sent successfully.');
+    // Send the email
+    if (mail($to, $subject, $email_content, $headers)) {
+        http_response_code(200);
+        echo "Thank you! Your message has been sent.";
+    } else {
+        http_response_code(500);
+        echo "Oops! Something went wrong and we couldn't send your message.";
+    }
 } else {
-    $response = array('success' => false, 'message' => 'Failed to send message. Please try again later.');
+    http_response_code(403);
+    echo "There was a problem with your submission, please try again.";
 }
-
-echo json_encode($response);
