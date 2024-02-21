@@ -190,7 +190,7 @@
                             </div>
                         </div>
                         <div class="col-lg-6 wow fadeIn" data-wow-delay=".5s">
-                            <form id="contactForm" class="p-5 rounded contact-form" action="js/submit_form.php"
+                            <form id="google-sheet" class="p-5 rounded contact-form" action="js/submit_form.php"
                                 method="post">
                                 <div class="mb-4">
                                     <input id="name" name="name" type="text" class="form-control border-0 py-3"
@@ -206,10 +206,11 @@
                                 </div>
                                 <div class="h-captcha" data-sitekey="d356f27d-c5ca-4d15-8f86-27357488558d"></div>
                                 <br />
+                                 <input type="hidden" name="h-captcha-response" id="h-captcha-response">
                                 <div class="text-start">
                                     <button class="btn bg-primary text-white py-3 px-5" type="submit">Send
                                         Message</button>
-                                </div>
+                                </div>                               
                             </form>
                             <div id="notification"></div>
                         </div>
