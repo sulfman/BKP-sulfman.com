@@ -192,6 +192,7 @@
                         <div class="col-lg-6 wow fadeIn" data-wow-delay=".5s">
                             <form id="contactForm" class="p-5 rounded contact-form" action="js/contact_form.js"
                                 method="post">
+                                <input type="hidden" name="timestamp" id="timestamp">
                                 <div class="mb-4">
                                     <input id="name" name="name" type="text" class="form-control border-0 py-3"
                                         placeholder="Your Name" required>
@@ -207,8 +208,8 @@
                                 <div class="mb-4">
                                     <textarea id="message" name="message" class="w-100 form-control border-0 py-3"
                                         rows="6" cols="10" placeholder="Message" required></textarea>
-                                </div>
-                                <div class="h-captcha" data-sitekey="d356f27d-c5ca-4d15-8f86-27357488558d"></div>
+                                </div>                                
+                                <div class="h-captcha mb-4" data-sitekey="d356f27d-c5ca-4d15-8f86-27357488558d"></div>
                                 <div class="text-start">
                                     <button class="btn bg-primary text-white py-3 px-5" type="submit">Send
                                         Message</button>
