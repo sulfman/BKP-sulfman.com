@@ -1,25 +1,33 @@
-const form = document.getElementById('contactForm');
-form.addEventListener('submit', handleSubmit);
-
-function handleSubmit(event) {
+document.getElementById('contactForm').addEventListener('submit', function (event) {
     event.preventDefault();
-    const formData = new FormData(event.target);
-    const jsonData = {};
-    formData.forEach((value, key) => {
-        jsonData[key] = value;
-    });
+    var formData = new FormData(this);
+    var token = grecaptcha.getResponse();
+    if (!token) {
+        alert('Please complete the captcha');
+        return;
+    }
+    formData.append('captchaToken', token);
+    sendData(formData);
+});
 
-    fetch('https://script.google.com/u/1/home/projects/1Ly4RvEMeojvh-C9vk2v8YU8Oj-rcjO_HCn902LRwLKsYhxtplBMeM4lM', {
+function sendData(formData) {
+    fetch('https://script.google.com/macros/s/AKfycbwqSkrAA8odfSbeh78akit9VRznp47OTuIvyyn59-x7E8csR7AgiT2ANCr5Nh2M8EEfHQ/exec', {
             method: 'POST',
-            mode: 'no-cors',
-            body: JSON.stringify(jsonData),
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            body: formData
         })
         .then(response => {
-            alert('Form submitted successfully!');
-            form.reset();
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
         })
-        .catch(error => console.error('Error:', error));
+        .then(data => {
+            console.log(data);
+            alert('Form submitted successfully!');
+            document.getElementById('contactForm').reset(); // Reset the form after successful submission
+        })
+        .catch(error => {
+            console.error('There was an error!', error);
+            alert('An error occurred while submitting the form. Please try again later.');
+        });
 }
