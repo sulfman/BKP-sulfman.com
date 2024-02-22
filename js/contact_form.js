@@ -1,5 +1,3 @@
-document.getElementById('timestamp').value = new Date().toISOString();
-
 document.getElementById('contactForm').addEventListener('submit', function (event) {
     event.preventDefault();
     var formData = new FormData(this);
@@ -25,7 +23,7 @@ function sendData(formData) {
         })
         .then(data => {
             console.log(data);
-            showAlert('We have received your message, We will contact you soon!', 'success');
+            showAlert('Form has been Sent!', 'success');
             document.getElementById('contactForm').reset(); // Reset the form after successful submission
         })
         .catch(error => {
