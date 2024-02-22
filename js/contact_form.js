@@ -23,7 +23,7 @@ function sendData(formData) {
         })
         .then(data => {
             console.log(data);
-            showAlert('Form submitted successfully!', 'success');
+            showAlert('We have received your message, We will contact you soon!', 'success');
             document.getElementById('contactForm').reset(); // Reset the form after successful submission
         })
         .catch(error => {
