@@ -11,7 +11,7 @@ document.getElementById('contactForm').addEventListener('submit', function (even
 });
 
 function sendData(formData) {
-    fetch('https://script.google.com/macros/s/AKfycbzIwUNsgmfss7W06Ql1t0xR1s_rmXs1qzJRvA0ckY_5KmTqf4IYniOM6xg1iogDDMsA/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbxD3f0XvPKdA2co-hreO35U1H_dKN0rXOx8nRHuME0C5gjWFGGt_MXkw_t1pZM3UWc7DA/exec', {
             method: 'POST',
             body: formData
         })
