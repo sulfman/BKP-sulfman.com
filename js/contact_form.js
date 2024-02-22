@@ -3,7 +3,7 @@ document.getElementById('contactForm').addEventListener('submit', function (even
     var formData = new FormData(this);
     var token = grecaptcha.getResponse();
     if (!token) {
-        alert('Please complete the captcha');
+        showAlert('Please complete the captcha', 'error');
         return;
     }
     formData.append('captchaToken', token);
@@ -23,11 +23,20 @@ function sendData(formData) {
         })
         .then(data => {
             console.log(data);
-            alert('Form submitted successfully!');
+            showAlert('Form submitted successfully!', 'success');
             document.getElementById('contactForm').reset(); // Reset the form after successful submission
         })
         .catch(error => {
             console.error('There was an error!', error);
-            alert('An error occurred while submitting the form. Please try again later.');
+            showAlert('An error occurred while submitting the form. Please try again later.', 'error');
         });
+}
+
+function showAlert(message, type) {
+    swal({
+        title: '',
+        text: message,
+        icon: type,
+        button: 'OK',
+    });
 }
