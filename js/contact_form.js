@@ -9,14 +9,6 @@ function handleSubmit(event) {
         jsonData[key] = value;
     });
 
-    const captchaResponse = hcaptcha.getResponse();
-    if (!captchaResponse) {
-        alert('Please complete the captcha.');
-        return;
-    }
-
-    jsonData['captcha'] = captchaResponse;
-
     fetch('https://script.google.com/u/1/home/projects/1AHIel-SAbR_slEVkbCQYh7Urv3GIO4IE3-lrjBO9eZ_rUOPp6WcTBnUe', {
             method: 'POST',
             mode: 'no-cors',
