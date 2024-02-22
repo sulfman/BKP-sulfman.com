@@ -9,7 +9,7 @@ function handleSubmit(event) {
         jsonData[key] = value;
     });
 
-    fetch('https://script.google.com/u/1/home/projects/1AHIel-SAbR_slEVkbCQYh7Urv3GIO4IE3-lrjBO9eZ_rUOPp6WcTBnUe', {
+    fetch('https://script.google.com/u/1/home/projects/1Ly4RvEMeojvh-C9vk2v8YU8Oj-rcjO_HCn902LRwLKsYhxtplBMeM4lM', {
             method: 'POST',
             mode: 'no-cors',
             body: JSON.stringify(jsonData),
