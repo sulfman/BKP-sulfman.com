@@ -1,42 +1,38 @@
-document.getElementById('contactForm').addEventListener('submit', function (event) {
-    event.preventDefault();
-    var formData = new FormData(this);
-    var token = grecaptcha.getResponse();
-    if (!token) {
-        showAlert('Please complete the captcha', 'error');
+document.getElementById("contactForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    // Check if hCaptcha is verified
+    const response = window.hcaptcha.getResponse();
+    if (!response) {
+        // Show error message if hCaptcha is not verified
+        swal("Error!", "Please complete the CAPTCHA verification.", "error");
         return;
     }
-    formData.append('captchaToken', token);
-    sendData(formData);
-});
 
-function sendData(formData) {
-    fetch('https://script.google.com/macros/s/AKfycbxD3f0XvPKdA2co-hreO35U1H_dKN0rXOx8nRHuME0C5gjWFGGt_MXkw_t1pZM3UWc7DA/exec', {
+    const formData = new FormData(this);
+    const url = 'https://docs.google.com/forms/d/17vh0sAIuqDWZ2hV59V0foQ9x9_h43CDHAB_FW_axkl0'; // Replace with your Google Form URL
+
+    try {
+        const submitData = {
+            ...Object.fromEntries(formData.entries()),
+            'h-captcha-response': response
+        };
+        const response = await fetch(url, {
             method: 'POST',
-            body: formData
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.text();
-        })
-        .then(data => {
-            console.log(data);
-            showAlert('Form has been Sent!', 'success');
-            document.getElementById('contactForm').reset(); // Reset the form after successful submission
-        })
-        .catch(error => {
-            console.error('There was an error!', error);
-            showAlert('An error occurred while submitting the form. Please try again later.', 'error');
+            body: new URLSearchParams(submitData)
         });
-}
-
-function showAlert(message, type) {
-    swal({
-        title: '',
-        text: message,
-        icon: type,
-        button: 'OK',
-    });
-}
+        if (response.ok) {
+            // Show success message
+            swal("Success!", "Form submitted successfully!", "success");
+            // Optionally, reset the form
+            this.reset();
+        } else {
+            // Show error message
+            swal("Error!", "Form submission failed. Please try again later.", "error");
+        }
+    } catch (error) {
+        // Show error message
+        swal("Error!", "There was an error submitting the form. Please try again later.", "error");
+        console.error('Error submitting form:', error);
+    }
+});
