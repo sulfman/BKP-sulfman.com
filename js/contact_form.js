@@ -1,38 +1,40 @@
-document.getElementById("contactForm").addEventListener("submit", async function (e) {
+const form = document.getElementById('contactForm');
+
+form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // Check if hCaptcha is verified
-    const response = window.hcaptcha.getResponse();
-    if (!response) {
-        // Show error message if hCaptcha is not verified
-        swal("Error!", "Please complete the CAPTCHA verification.", "error");
+    const formData = new FormData(form);
+    const formDataJson = {};
+    formData.forEach((value, key) => {
+        formDataJson[key] = value;
+    });
+
+    const token = grecaptcha.getResponse();
+    if (!token) {
+        swal("Oops!", "Please complete the hCaptcha challenge.", "error");
         return;
     }
 
-    const formData = new FormData(this);
-    const url = 'https://docs.google.com/forms/d/17vh0sAIuqDWZ2hV59V0foQ9x9_h43CDHAB_FW_axkl0'; // Replace with your Google Form URL
+    formDataJson['token'] = token;
 
+    const url = 'https://script.google.com/macros/s/AKfycbxSAHTfGVK_nyrsGl3pn1D7ujiIB6ML5D21KvuK9K92Y5aGyVQaAIMgH2q2EMwhKhvG/exec';
     try {
-        const submitData = {
-            ...Object.fromEntries(formData.entries()),
-            'h-captcha-response': response
-        };
         const response = await fetch(url, {
             method: 'POST',
-            body: new URLSearchParams(submitData)
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formDataJson)
         });
         if (response.ok) {
-            // Show success message
-            swal("Success!", "Form submitted successfully!", "success");
-            // Optionally, reset the form
-            this.reset();
+            swal("Success!", "Message sent successfully!", "success");
+            form.reset();
         } else {
-            // Show error message
-            swal("Error!", "Form submission failed. Please try again later.", "error");
+            swal("Oops!", "Failed to send message. Please try again later.", "error");
         }
     } catch (error) {
-        // Show error message
-        swal("Error!", "There was an error submitting the form. Please try again later.", "error");
-        console.error('Error submitting form:', error);
+        console.error('Error sending message:', error);
+        swal("Oops!", "An error occurred. Please try again later.", "error");
     }
 });
