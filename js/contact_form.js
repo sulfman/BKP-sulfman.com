@@ -1,12 +1,6 @@
 document.getElementById('contactForm').addEventListener('submit', function (event) {
     event.preventDefault();
     var formData = new FormData(this);
-    var token = grecaptcha.getResponse();
-    if (!token) {
-        showAlert('Please complete the captcha', 'error');
-        return;
-    }
-    formData.append('captchaToken', token);
     sendData(formData);
 });
 
