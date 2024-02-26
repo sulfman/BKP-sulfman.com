@@ -5,7 +5,7 @@ document.getElementById('contactForm').addEventListener('submit', function (even
 });
 
 function sendData(formData) {
-    fetch('https://script.google.com/macros/s/AKfycbx9SRbj9c7UXfhoMiSFwmfcMWOcZ1Jn3fC0UC8ok5FNm_xQqAqZxXC6D2L6j9yJLdzV9w/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbx9SRbj9c7UXfhoMiSFwmfcMWOcZ1Jn3fC0UC8ok5FNm_xQqAqZxXC6D2L6j9yJLdzV9w/exec', { // Replace 'your-apps-script-url' with the actual URL of your Google Apps Script endpoint
             method: 'POST',
             body: formData
         })
